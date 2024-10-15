@@ -13,41 +13,32 @@
   <style>
     body {
       background-color: #f8f9fa;
-      /* لون خلفية الصفحة */
     }
 
     h1 {
       color: #343a40;
-      /* لون العنوان */
     }
 
     .modal-header {
       background-color: #007bff;
-      /* لون رأس النافذة المنبثقة */
       color: white;
-      /* لون النص في الرأس */
     }
 
     .btn-primary {
       background-color: #007bff;
-      /* لون زر اختيار معايير الفلترة */
     }
 
     .btn-success {
       background-color: #28a745;
-      /* لون زر فلترة البيانات */
     }
 
     .btn-info {
       background-color: #17a2b8;
-      /* لون زر تنزيل البيانات */
     }
 
     .thead-dark {
       background-color: #343a40;
-      /* لون خلفية الرأس في الجدول */
       color: white;
-      /* لون النص في الرأس */
     }
 
     .table-bordered td,
@@ -61,7 +52,6 @@
       color: blue;
       margin-top: 10px;
     }
-  </style>
   </style>
 </head>
 
@@ -77,7 +67,7 @@
 
     <div id="filterModal" class="modal">
       <div class="modal-dialog modal-lg">
-        <div class="modal-content  text-left">
+        <div class="modal-content text-left">
           <div class="modal-header">
             <h5 class="modal-title">اختر معايير الفلترة</h5>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -85,43 +75,27 @@
           <div class="modal-body">
             <form id="filterForm">
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria"
-                  value="Unaccompanied child head of household" id="criteria1">
-                <label class="form-check-label" for="criteria1">Unaccompanied child head of household</label>
+                <input type="radio" class="form-check-input" name="filterType" value="and" id="andFilter" checked>
+                <label class="form-check-label" for="andFilter">AND (Vulnerability)</label>
               </div>
               <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria" value="Separated child" id="criteria2">
-                <label class="form-check-label" for="criteria2">Separated child</label>
+                <input type="radio" class="form-check-input" name="filterType" value="or" id="orFilter">
+                <label class="form-check-label" for="orFilter">OR (Vulnerability)</label>
               </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria" value="Serious medical/health condition"
-                  id="criteria3">
-                <label class="form-check-label" for="criteria3">Serious medical/health condition</label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria" value="Pregnant woman" id="criteria4">
-                <label class="form-check-label" for="criteria4">Pregnant woman</label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria"
-                  value="Person with disability – visual impairment" id="criteria5">
-                <label class="form-check-label" for="criteria5">Person with disability – visual impairment</label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria"
-                  value="Person with disability – physical disability" id="criteria6">
-                <label class="form-check-label" for="criteria6">Person with disability – physical disability</label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria"
-                  value="Person with disability – intellectual disability" id="criteria7">
-                <label class="form-check-label" for="criteria7">Person with disability – intellectual disability</label>
-              </div>
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="criteria"
-                  value="Person with disability – hearing impairment" id="criteria8">
-                <label class="form-check-label" for="criteria8">Person with disability – hearing impairment</label>
-              </div>
+
+              <h6 class="mt-3">اختر Vulnerability:</h6>
+              <div id="vulnerabilityOptions"></div>
+
+              <h6 class="mt-3">اختر Gender:</h6>
+              <select id="genderSelect" class="form-control">
+                <option value="">الكل</option>
+              </select>
+
+              <h6 class="mt-3">اختر Center Name:</h6>
+              <select id="centerSelect" class="form-control" multiple>
+                <option value="">الكل</option>
+              </select>
+
               <button type="submit" class="btn btn-success mt-3">فلترة البيانات</button>
             </form>
           </div>
@@ -152,7 +126,7 @@
     </table>
     <footer>
       <div class="mb-0" style="text-align:center">
-        Powerd By: Mr.Maher Zalan
+        Powered By: Mr.Maher Zalan
       </div>
       <div class="mb-0" style="text-align:center">
         Jawwal No: 0599535638
@@ -161,8 +135,7 @@
   </div>
 
   <script>
-    function _0x5a8c(_0x3f5e77,_0x417dc7){const _0x4f4249=_0x4f42();return _0x5a8c=function(_0x5a8c4d,_0x3421e0){_0x5a8c4d=_0x5a8c4d-0x1ea;let _0x429ecb=_0x4f4249[_0x5a8c4d];return _0x429ecb;},_0x5a8c(_0x3f5e77,_0x417dc7);}const _0x5aca49=_0x5a8c;(function(_0x2f3954,_0x3f9928){const _0xfb41ff=_0x5a8c,_0x7777d6=_0x2f3954();while(!![]){try{const _0x29902d=-parseInt(_0xfb41ff(0x218))/0x1*(-parseInt(_0xfb41ff(0x1f5))/0x2)+-parseInt(_0xfb41ff(0x1ee))/0x3*(parseInt(_0xfb41ff(0x21f))/0x4)+-parseInt(_0xfb41ff(0x1f7))/0x5*(parseInt(_0xfb41ff(0x226))/0x6)+-parseInt(_0xfb41ff(0x202))/0x7+parseInt(_0xfb41ff(0x1f8))/0x8+-parseInt(_0xfb41ff(0x228))/0x9+parseInt(_0xfb41ff(0x22e))/0xa;if(_0x29902d===_0x3f9928)break;else _0x7777d6['push'](_0x7777d6['shift']());}catch(_0x192495){_0x7777d6['push'](_0x7777d6['shift']());}}}(_0x4f42,0xdc69e),$(document)[_0x5aca49(0x215)](function(){const _0x55a3b4=_0x5aca49;let _0xf845f7=[],_0x3eed4a=[],_0x892b4f=_0x55a3b4(0x22f);$(_0x55a3b4(0x1fc))['on'](_0x55a3b4(0x222),function(_0xeadab3){const _0x3a3ade=_0x55a3b4,_0x104588=_0xeadab3['target'][_0x3a3ade(0x21d)][0x0],_0x299625=new FileReader();$(_0x3a3ade(0x232))[_0x3a3ade(0x217)](),_0x299625['onload']=function(_0x47b33e){const _0x3ca8c0=_0x3a3ade,_0x22ee61=new Uint8Array(_0x47b33e[_0x3ca8c0(0x21b)][_0x3ca8c0(0x225)]),_0x595a2c=XLSX[_0x3ca8c0(0x21e)](_0x22ee61,{'type':'array'}),_0x258f92=_0x595a2c['Sheets'][_0x595a2c['SheetNames'][0x0]];_0xf845f7=XLSX[_0x3ca8c0(0x205)][_0x3ca8c0(0x210)](_0x258f92),$(_0x3ca8c0(0x232))[_0x3ca8c0(0x22a)]();},_0x299625[_0x3a3ade(0x216)](_0x104588);}),$(_0x55a3b4(0x20c))['on'](_0x55a3b4(0x206),function(){const _0x474a28=_0x55a3b4;$('#filterModal')['modal'](_0x474a28(0x217));}),$(_0x55a3b4(0x213))['on'](_0x55a3b4(0x20a),function(_0x3e9d55){const _0x28b093=_0x55a3b4;_0x3e9d55['preventDefault']();const _0x2cf170=[];$('input[name=\x27criteria\x27]:checked')['each'](function(){const _0x53b917=_0x5a8c;_0x2cf170[_0x53b917(0x207)]($(this)[_0x53b917(0x1fb)]());});if(_0x2cf170[_0x28b093(0x220)]===0x0){alert(_0x28b093(0x200));return;}_0x3eed4a=_0xf845f7[_0x28b093(0x219)](_0x2ed0a9=>{const _0x335626=_0x28b093,_0x33788e=_0x2ed0a9[_0x335626(0x224)]?_0x2ed0a9[_0x335626(0x224)]['split'](','):[];return _0x33788e[_0x335626(0x229)](_0x2b5e03=>_0x2cf170[_0x335626(0x1ff)](_0x2b5e03[_0x335626(0x203)]()));}),$(_0x28b093(0x22c))[_0x28b093(0x204)](_0x3eed4a[_0x28b093(0x220)]),$(_0x28b093(0x20d))['toggle'](_0x3eed4a[_0x28b093(0x220)]>0x0),_0x26d0f9(_0x3eed4a),$(_0x28b093(0x1f0))['modal'](_0x28b093(0x22a));});function _0x26d0f9(_0x2e1bb8){const _0x544210=_0x55a3b4;$('#resultTable\x20tbody')[_0x544210(0x208)](),_0x2e1bb8[_0x544210(0x20f)](_0x2d3e81=>{const _0x3de50d=_0x544210,_0x20eaa1=_0x2d3e81['Member\x20Date\x20Birth'],_0x157b11=_0x20eaa1?XLSX[_0x3de50d(0x1eb)][_0x3de50d(0x230)](_0x20eaa1):null,_0x46125e=_0x157b11?_0x157b11['y']+'-'+String(_0x157b11['m'])['padStart'](0x2,'0')+'-'+String(_0x157b11['d'])[_0x3de50d(0x22d)](0x2,'0'):'';$(_0x3de50d(0x231))[_0x3de50d(0x20e)](_0x3de50d(0x1fa)+(_0x2d3e81['HOF\x20ID']||'')+_0x3de50d(0x214)+(_0x2d3e81[_0x3de50d(0x1fe)]||'')+_0x3de50d(0x214)+(_0x2d3e81['Member\x20FullName']||'')+_0x3de50d(0x214)+(_0x2d3e81[_0x3de50d(0x20b)]||'')+_0x3de50d(0x214)+(_0x46125e||'')+_0x3de50d(0x214)+(_0x2d3e81[_0x3de50d(0x221)]||'')+_0x3de50d(0x214)+(_0x2d3e81[_0x3de50d(0x22b)]||'')+_0x3de50d(0x214)+(_0x2d3e81[_0x3de50d(0x1f4)]||'')+_0x3de50d(0x214)+(_0x2d3e81[_0x3de50d(0x224)]||'')+_0x3de50d(0x209));});}$('th')['on'](_0x55a3b4(0x206),function(){const _0x3c1244=_0x55a3b4,_0x1b5278=$(this)['data'](_0x3c1244(0x1f1));_0x892b4f=_0x892b4f===_0x3c1244(0x22f)?'desc':_0x3c1244(0x22f),_0x3eed4a[_0x3c1244(0x21c)]((_0x8c193,_0x153871)=>{const _0x5c18da=_0x3c1244;let _0x2d1cca=_0x8c193[_0x1b5278]||'',_0x116a0e=_0x153871[_0x1b5278]||'';if(_0x1b5278==='Member\x20Date\x20Birth')return _0x2d1cca=_0x2d1cca?XLSX[_0x5c18da(0x1eb)]['parse_date_code'](_0x2d1cca):{'y':0x76c,'m':0x1,'d':0x1},_0x116a0e=_0x116a0e?XLSX[_0x5c18da(0x1eb)]['parse_date_code'](_0x116a0e):{'y':0x76c,'m':0x1,'d':0x1},_0x892b4f===_0x5c18da(0x22f)?new Date(_0x2d1cca['y'],_0x2d1cca['m']-0x1,_0x2d1cca['d'])-new Date(_0x116a0e['y'],_0x116a0e['m']-0x1,_0x116a0e['d']):new Date(_0x116a0e['y'],_0x116a0e['m']-0x1,_0x116a0e['d'])-new Date(_0x2d1cca['y'],_0x2d1cca['m']-0x1,_0x2d1cca['d']);return _0x892b4f===_0x5c18da(0x22f)?_0x2d1cca['toString']()[_0x5c18da(0x1f3)](_0x116a0e[_0x5c18da(0x1ef)]()):_0x116a0e[_0x5c18da(0x1ef)]()[_0x5c18da(0x1f3)](_0x2d1cca[_0x5c18da(0x1ef)]());}),_0x26d0f9(_0x3eed4a);}),$(_0x55a3b4(0x212))['on'](_0x55a3b4(0x1f9),function(){const _0x69d646=_0x55a3b4,_0x5d5624=$(this)[_0x69d646(0x1fb)]()[_0x69d646(0x201)]();$('#resultTable\x20tbody\x20tr')[_0x69d646(0x219)](function(){const _0x4a6ff7=_0x69d646;$(this)['toggle']($(this)[_0x4a6ff7(0x204)]()[_0x4a6ff7(0x201)]()[_0x4a6ff7(0x21a)](_0x5d5624)>-0x1);});}),$(_0x55a3b4(0x20d))['on'](_0x55a3b4(0x206),function(){const _0x4cc107=_0x55a3b4,_0x39c8ee=XLSX['utils'][_0x4cc107(0x1ea)](_0x3eed4a),_0x6f901d=XLSX[_0x4cc107(0x205)]['book_new']();XLSX[_0x4cc107(0x205)][_0x4cc107(0x227)](_0x6f901d,_0x39c8ee,_0x4cc107(0x211));const _0x2a9321=new Date(),_0x3377ed=_0x4cc107(0x1ec)+_0x2a9321['toLocaleDateString']()+_0x4cc107(0x1f6)+_0x2a9321[_0x4cc107(0x1ed)]();_0x39c8ee[_0x4cc107(0x1f2)]=[{'hpt':0x14}];const _0x1f2dcf=_0x39c8ee['!ref'][_0x4cc107(0x223)](':')[0x1][_0x4cc107(0x1fd)](/\D/g,''),_0x4e4fe2='A'+(parseInt(_0x1f2dcf)+0x1);_0x39c8ee[_0x4e4fe2]={'v':_0x3377ed,'t':'s'},_0x39c8ee[_0x4e4fe2]['s']={'alignment':{'horizontal':'right'},'font':{'bold':!![]}},XLSX['writeFile'](_0x6f901d,'البيانات\x20المفلترة.xlsx');});}));function _0x4f42(){const _0x4186cf=['19954500GxEYju','asc','parse_date_code','#resultTable\x20tbody','#loadingMessage','json_to_sheet','SSF','تاريخ\x20التصدير:\x20','toLocaleTimeString','3813762Mtrznn','toString','#filterModal','column','!rows','localeCompare','Center\x20Name','2336732ABQVIV','\x20|\x20الوقت:\x20','2591285FxgOxL','9171120EtVrYi','keyup','<tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<td>','val','#fileInput','replace','HOF\x20FullName','includes','يرجى\x20اختيار\x20معيار\x20واحد\x20على\x20الأقل\x20للفلترة.','toLowerCase','2699494ycRyCH','trim','text','utils','click','push','empty','</td>\x0a\x20\x20\x20\x20\x20\x20</tr>','submit','Member\x20ID','#openFilterBtn','#downloadBtn','append','forEach','sheet_to_json','البيانات\x20المفلترة','#searchInput','#filterForm','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<td>','ready','readAsArrayBuffer','show','1hizNql','filter','indexOf','target','sort','files','read','4GUzDTA','length','Member\x20Gender','change','split','Vulnerability','result','18rshVqQ','book_append_sheet','1761525ZMcrrW','some','hide','Relation\x20Type','#resultCount','padStart'];_0x4f42=function(){return _0x4186cf;};return _0x4f42();}
+    function _0xaaa9(){const _0x5c8a94=['#downloadBtn','sheet_to_json','9AuQWoI','<option\x20value=\x22','248hgXOCg','array','get','flatMap','4PmiigU','some','</option>','click','#genderSelect','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>','#filterModal','Member\x20Gender','val','FilteredData','length','forEach','HOF\x20ID','#filterForm','submit','onload','show','text','empty','#resultCount','يرجى\x20اختيار\x20معيار\x20Vulnerability\x20واحد\x20على\x20الأقل\x20للفلترة.','result','filtered_data.xlsx','#resultTable\x20tbody','غير\x20محدد','Sheets','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>','1667670KgxqAM','Vulnerability','5mHJngW','includes','#loadingMessage','959277QzSaqM','input','يرجى\x20تحميل\x20ملف\x20Excel\x20أولاً.','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<label\x20class=\x22form-check-label\x22\x20for=\x22vulnerability','every','filter','files','152621BfGHLJ','#centerSelect','split','toLowerCase','utils','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22form-check\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<input\x20type=\x22checkbox\x22\x20class=\x22form-check-input\x22\x20name=\x22vulnerability\x22\x20value=\x22','154805ADfNBl','Member\x20Date\x20Birth','HOF\x20FullName','hide','json_to_sheet','Center\x20Name','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','trim','book_append_sheet','modal','SheetNames','</label>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','2052890hTyxuZ','target','values','book_new','#searchInput','writeFile','append','#vulnerabilityOptions','map','Member\x20ID','1293438RQeAKI','input[name=\x27filterType\x27]:checked','2532648jWJnlP'];_0xaaa9=function(){return _0x5c8a94;};return _0xaaa9();}function _0x50d7(_0x5d0c69,_0x2a22c1){const _0xaaa974=_0xaaa9();return _0x50d7=function(_0x50d796,_0x28a7ff){_0x50d796=_0x50d796-0xb2;let _0x486407=_0xaaa974[_0x50d796];return _0x486407;},_0x50d7(_0x5d0c69,_0x2a22c1);}(function(_0x37a8ed,_0x53456f){const _0x12ae62=_0x50d7,_0x4fdffd=_0x37a8ed();while(!![]){try{const _0x1b39b5=-parseInt(_0x12ae62(0xe3))/0x1+parseInt(_0x12ae62(0xff))/0x2+parseInt(_0x12ae62(0xd7))/0x3*(-parseInt(_0x12ae62(0xbc))/0x4)+-parseInt(_0x12ae62(0xd9))/0x5*(parseInt(_0x12ae62(0xb3))/0x6)+-parseInt(_0x12ae62(0xe9))/0x7*(-parseInt(_0x12ae62(0xb8))/0x8)+-parseInt(_0x12ae62(0xb6))/0x9*(-parseInt(_0x12ae62(0xf5))/0xa)+parseInt(_0x12ae62(0xdc))/0xb;if(_0x1b39b5===_0x53456f)break;else _0x4fdffd['push'](_0x4fdffd['shift']());}catch(_0x9eb576){_0x4fdffd['push'](_0x4fdffd['shift']());}}}(_0xaaa9,0x78a51),$(document)['ready'](function(){const _0x36ce3e=_0x50d7;let _0x1a992a=[],_0x9dfe08=[],_0x466e8c=[],_0x49bc69=[],_0x2950fc=[];$('#fileInput')['on']('change',function(_0x1c976c){const _0x284c83=_0x50d7,_0x5c0072=_0x1c976c[_0x284c83(0xf6)][_0x284c83(0xe2)][0x0],_0xb50100=new FileReader();$(_0x284c83(0xdb))[_0x284c83(0xcc)](),_0xb50100[_0x284c83(0xcb)]=function(_0x2ae2c1){const _0x9b1e8b=_0x284c83,_0x389eed=new Uint8Array(_0x2ae2c1[_0x9b1e8b(0xf6)][_0x9b1e8b(0xd1)]),_0x3bb411=XLSX['read'](_0x389eed,{'type':_0x9b1e8b(0xb9)}),_0x2d24fa=_0x3bb411[_0x9b1e8b(0xd5)][_0x3bb411[_0x9b1e8b(0xf3)][0x0]];_0x1a992a=XLSX[_0x9b1e8b(0xe7)][_0x9b1e8b(0xb5)](_0x2d24fa),_0x466e8c=[...new Set(_0x1a992a[_0x9b1e8b(0xbb)](_0x241dd2=>_0x241dd2[_0x9b1e8b(0xd8)]?_0x241dd2[_0x9b1e8b(0xd8)][_0x9b1e8b(0xe5)](',')['map'](_0x466dae=>_0x466dae[_0x9b1e8b(0xf0)]()):[]))],_0x49bc69=[...new Set(_0x1a992a[_0x9b1e8b(0xfd)](_0x248a64=>_0x248a64[_0x9b1e8b(0xc3)]))],_0x2950fc=[...new Set(_0x1a992a['map'](_0x9584f0=>_0x9584f0[_0x9b1e8b(0xee)]))],_0x5ac389(_0x466e8c,_0x49bc69,_0x2950fc),$(_0x9b1e8b(0xdb))['hide']();},_0xb50100['readAsArrayBuffer'](_0x5c0072);});function _0x5ac389(_0x4be19f,_0x4fd7a2,_0x3e5e27){const _0x3c5eba=_0x50d7,_0x23dfc8=$(_0x3c5eba(0xfc));_0x23dfc8[_0x3c5eba(0xce)](),_0x4be19f[_0x3c5eba(0xc7)]((_0x253e39,_0x2c6be7)=>{const _0x147e84=_0x3c5eba,_0x352ddc=_0x147e84(0xe8)+_0x253e39+'\x22\x20id=\x22vulnerability'+_0x2c6be7+_0x147e84(0xdf)+_0x2c6be7+'\x22>'+_0x253e39+_0x147e84(0xf4);_0x23dfc8[_0x147e84(0xfb)](_0x352ddc);});const _0x2b6819=$(_0x3c5eba(0xc0));_0x4fd7a2['forEach'](_0x308938=>{const _0x61cfee=_0x3c5eba;_0x2b6819['append'](_0x61cfee(0xb7)+(_0x308938||'')+'\x22>'+(_0x308938||_0x61cfee(0xd4))+'</option>');});const _0x494853=$(_0x3c5eba(0xe4));_0x3e5e27[_0x3c5eba(0xc7)](_0x39d910=>{const _0xd9f56=_0x3c5eba;_0x494853[_0xd9f56(0xfb)](_0xd9f56(0xb7)+(_0x39d910||'')+'\x22>'+(_0x39d910||_0xd9f56(0xd4))+_0xd9f56(0xbe));});}$('#openFilterBtn')['on'](_0x36ce3e(0xbf),function(){const _0x274eaa=_0x36ce3e;_0x466e8c[_0x274eaa(0xc6)]===0x0?alert(_0x274eaa(0xde)):$(_0x274eaa(0xc2))[_0x274eaa(0xf2)](_0x274eaa(0xcc));}),$(_0x36ce3e(0xc9))['on'](_0x36ce3e(0xca),function(_0x5a5d0a){const _0x2152ab=_0x36ce3e;_0x5a5d0a['preventDefault']();const _0x4333bd=$('input[name=\x27vulnerability\x27]:checked')[_0x2152ab(0xfd)](function(){const _0x1814fc=_0x2152ab;return $(this)[_0x1814fc(0xc4)]();})[_0x2152ab(0xba)](),_0x335869=$('#genderSelect')[_0x2152ab(0xc4)](),_0x38f116=$('#centerSelect')[_0x2152ab(0xc4)]();if(_0x4333bd[_0x2152ab(0xc6)]===0x0){alert(_0x2152ab(0xd0));return;}const _0x5110ec=$(_0x2152ab(0xb2))[_0x2152ab(0xc4)]();_0x9dfe08=_0x1a992a[_0x2152ab(0xe1)](_0x16172d=>{const _0x485384=_0x2152ab,_0x1d77a6=_0x16172d[_0x485384(0xd8)]?_0x16172d[_0x485384(0xd8)][_0x485384(0xe5)](',')[_0x485384(0xfd)](_0x2daf75=>_0x2daf75[_0x485384(0xf0)]()):[],_0x55ad55=_0x5110ec==='or'?_0x4333bd[_0x485384(0xbd)](_0x232d98=>_0x1d77a6[_0x485384(0xda)](_0x232d98)):_0x4333bd[_0x485384(0xe0)](_0x2e73dd=>_0x1d77a6[_0x485384(0xda)](_0x2e73dd)),_0x51cdd3=_0x335869?_0x16172d[_0x485384(0xc3)]===_0x335869:!![],_0x33c131=_0x38f116[_0x485384(0xc6)]>0x0?_0x38f116[_0x485384(0xda)](_0x16172d[_0x485384(0xee)]):!![];return _0x55ad55&&_0x51cdd3&&_0x33c131;}),_0x5a2d5f(),$('#filterModal')[_0x2152ab(0xf2)](_0x2152ab(0xec));});function _0x5a2d5f(){const _0x254005=_0x36ce3e,_0x3efde9=$(_0x254005(0xd3));_0x3efde9['empty'](),_0x9dfe08['forEach'](_0x1a915e=>{const _0x4cabcb=_0x254005;_0x3efde9[_0x4cabcb(0xfb)](_0x4cabcb(0xd6)+_0x1a915e[_0x4cabcb(0xc8)]+_0x4cabcb(0xc1)+_0x1a915e['HOF\x20FullName']+_0x4cabcb(0xc1)+_0x1a915e['Member\x20FullName']+_0x4cabcb(0xc1)+_0x1a915e[_0x4cabcb(0xfe)]+_0x4cabcb(0xc1)+_0x1a915e[_0x4cabcb(0xea)]+_0x4cabcb(0xc1)+_0x1a915e[_0x4cabcb(0xc3)]+_0x4cabcb(0xc1)+_0x1a915e['Relation\x20Type']+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x1a915e[_0x4cabcb(0xee)]+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x1a915e[_0x4cabcb(0xd8)]+_0x4cabcb(0xef));}),$(_0x254005(0xcf))[_0x254005(0xcd)](_0x9dfe08['length']),$(_0x254005(0xb4))['toggle'](_0x9dfe08['length']>0x0);}$(_0x36ce3e(0xf9))['on'](_0x36ce3e(0xdd),function(){const _0x4cca3a=_0x36ce3e,_0x2634a3=$(this)[_0x4cca3a(0xc4)]()['toLowerCase'](),_0x4d1a95=_0x9dfe08[_0x4cca3a(0xe1)](_0xc12896=>{const _0x55a7e3=_0x4cca3a;return Object[_0x55a7e3(0xf7)](_0xc12896)['some'](_0x146552=>String(_0x146552)[_0x55a7e3(0xe6)]()[_0x55a7e3(0xda)](_0x2634a3));});_0x1189ab(_0x4d1a95);});function _0x1189ab(_0x2a5ce7){const _0x394f07=_0x36ce3e,_0x59a2ce=$(_0x394f07(0xd3));_0x59a2ce[_0x394f07(0xce)](),_0x2a5ce7[_0x394f07(0xc7)](_0x38ce41=>{const _0x2db457=_0x394f07;_0x59a2ce['append'](_0x2db457(0xd6)+_0x38ce41[_0x2db457(0xc8)]+_0x2db457(0xc1)+_0x38ce41[_0x2db457(0xeb)]+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x38ce41['Member\x20FullName']+_0x2db457(0xc1)+_0x38ce41['Member\x20ID']+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x38ce41[_0x2db457(0xea)]+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x38ce41[_0x2db457(0xc3)]+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x38ce41['Relation\x20Type']+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x38ce41['Center\x20Name']+_0x2db457(0xc1)+_0x38ce41[_0x2db457(0xd8)]+_0x2db457(0xef));}),$(_0x394f07(0xcf))[_0x394f07(0xcd)](_0x2a5ce7[_0x394f07(0xc6)]);}$(_0x36ce3e(0xb4))['on']('click',function(){const _0x4c0b8b=_0x36ce3e,_0x14cf68=XLSX['utils'][_0x4c0b8b(0xed)](_0x9dfe08),_0x3163e5=XLSX[_0x4c0b8b(0xe7)][_0x4c0b8b(0xf8)]();XLSX['utils'][_0x4c0b8b(0xf1)](_0x3163e5,_0x14cf68,_0x4c0b8b(0xc5)),XLSX[_0x4c0b8b(0xfa)](_0x3163e5,_0x4c0b8b(0xd2));});}));
   </script>
 </body>
-
 </html>
