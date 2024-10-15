@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحميل بيانات Excel</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Select CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css"
+    rel="stylesheet">
+
+
+  <!-- jQuery (required for Bootstrap and Bootstrap Select) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- Bootstrap Select JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+  <style>
+    .dropdown-menu.open {
+      max-height: 300px;
+      /* يمكنك تعديل هذا الرقم حسب احتياجاتك */
+      overflow-y: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center">تحميل بيانات Excel</h1>
+    <div class="form-group">
+      <input type="file" id="fileInput" multiple class="form-control-file" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="centerSelect">اختيار Center:</label>
+        <select id="centerSelect" multiple class="form-control selectpicker" data-live-search="true"></select>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="categorySelect">اختيار Category:</label>
+        <select id="categorySelect" class="form-control selectpicker" data-live-search="true"></select>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="statusSelect">اختيار Status:</label>
+        <select id="statusSelect" class="form-control selectpicker" data-live-search="true"></select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <textarea id="idInput" placeholder="أدخل الـ IDs، كل ID في سطر جديد" class="form-control"></textarea>
+    </div>
+
+    <button id="loadData" class="btn btn-primary">عرض النتائج</button>
+    <button id="downloadResults" class="btn btn-success" style="display:none;">تنزيل النتائج</button>
+    <p id="resultCount" class="text-center"></p>
+
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>FNAME</th>
+          <th>SNAME</th>
+          <th>TNAME</th>
+          <th>LNAME</th>
+          <th>CenterEnglishName</th>
+          <th>CategoryEnglishName</th>
+          <th>StatusName</th>
+        </tr>
+      </thead>
+      <tbody id="result-body"></tbody>
+    </table>
+    <footer></footer>
+    <div class="mb-0" style="text-align:center">
+      Powered By: Mr.Maher Zalan
+    </div>
+    <div class="mb-0" style="text-align:center">
+      Jawwal No: 0599535638
+    </div>
+    </footer>
+  </div>
+
+  <script>
+    const _0x14ce01 = _0x2290; (function (_0x396623, _0x51879e) { const _0x5493ac = _0x2290, _0x1a22a2 = _0x396623(); while (!![]) { try { const _0x1df6d3 = parseInt(_0x5493ac(0x1ec)) / 0x1 * (parseInt(_0x5493ac(0x1cd)) / 0x2) + -parseInt(_0x5493ac(0x1fe)) / 0x3 * (-parseInt(_0x5493ac(0x1e8)) / 0x4) + parseInt(_0x5493ac(0x1fa)) / 0x5 * (parseInt(_0x5493ac(0x1e2)) / 0x6) + -parseInt(_0x5493ac(0x1e3)) / 0x7 * (-parseInt(_0x5493ac(0x1d7)) / 0x8) + -parseInt(_0x5493ac(0x1d2)) / 0x9 + -parseInt(_0x5493ac(0x1e6)) / 0xa * (parseInt(_0x5493ac(0x1ed)) / 0xb) + -parseInt(_0x5493ac(0x1da)) / 0xc * (parseInt(_0x5493ac(0x1e0)) / 0xd); if (_0x1df6d3 === _0x51879e) break; else _0x1a22a2['push'](_0x1a22a2['shift']()); } catch (_0x362cc1) { _0x1a22a2['push'](_0x1a22a2['shift']()); } } }(_0x727a, 0x7a32c), $(document)[_0x14ce01(0x1e1)](function () { const _0x4d8552 = _0x14ce01; let _0x313878 = [], _0x150fdd = []; $(_0x4d8552(0x1f4))[_0x4d8552(0x1f8)](), $('#fileInput')['on']('change', function (_0x2bf68d) { const _0x54f806 = _0x4d8552, _0x1bb0f8 = _0x2bf68d[_0x54f806(0x1d9)][_0x54f806(0x20a)]; _0x313878 = []; const _0x211834 = new Set(), _0x14765d = new Set(), _0x138a2f = new Set(); for (let _0x2117bc = 0x0; _0x2117bc < _0x1bb0f8['length']; _0x2117bc++) { const _0xc3a12a = _0x1bb0f8[_0x2117bc], _0x5db8fc = new FileReader(); _0x5db8fc[_0x54f806(0x1cf)] = function (_0x57b1ea) { const _0x2f3c72 = _0x54f806, _0x58c762 = new Uint8Array(_0x57b1ea[_0x2f3c72(0x1d9)][_0x2f3c72(0x206)]), _0xa2c716 = XLSX[_0x2f3c72(0x1d3)](_0x58c762, { 'type': _0x2f3c72(0x1db) }), _0x2cad74 = _0xa2c716[_0x2f3c72(0x20e)][_0xa2c716[_0x2f3c72(0x202)][0x0]], _0x456c7e = XLSX[_0x2f3c72(0x203)][_0x2f3c72(0x1e5)](_0x2cad74); _0x313878 = _0x313878['concat'](_0x456c7e), _0x456c7e['forEach'](_0x5c7602 => { const _0x151fcb = _0x2f3c72; if (_0x5c7602[_0x151fcb(0x1e4)]) _0x211834[_0x151fcb(0x207)](_0x5c7602[_0x151fcb(0x1e4)]); if (_0x5c7602['CategoryEnglishName']) _0x14765d[_0x151fcb(0x207)](_0x5c7602[_0x151fcb(0x20b)]); if (_0x5c7602['StatusName']) _0x138a2f['add'](_0x5c7602[_0x151fcb(0x1c9)]); }), _0x29ae17('#centerSelect', _0x211834), _0x29ae17(_0x2f3c72(0x1f0), _0x14765d), _0x29ae17(_0x2f3c72(0x205), _0x138a2f); }, _0x5db8fc[_0x54f806(0x209)](_0xc3a12a); } }); function _0x29ae17(_0x7c6c36, _0x4de5fe) { const _0x41d682 = _0x4d8552; $(_0x7c6c36)['empty'](), $(_0x7c6c36)[_0x41d682(0x1f1)](_0x41d682(0x1cc)), _0x4de5fe[_0x41d682(0x1ff)](_0x515391 => { const _0xb61176 = _0x41d682; $(_0x7c6c36)[_0xb61176(0x1f1)](_0xb61176(0x1fb) + _0x515391 + '\x22>' + _0x515391 + _0xb61176(0x1f2)); }), $(_0x7c6c36)[_0x41d682(0x1f8)]('refresh'); } $(_0x4d8552(0x1eb))['on'](_0x4d8552(0x204), function () { const _0x29ea65 = _0x4d8552; let _0x479683 = $(_0x29ea65(0x1e7))[_0x29ea65(0x20f)]()[_0x29ea65(0x1e9)](/[\n,]+/)[_0x29ea65(0x1dd)](_0x26725e => _0x26725e['trim']())['filter'](_0x11c482 => _0x11c482); const _0x33879e = $(_0x29ea65(0x210))[_0x29ea65(0x20f)](), _0x1a3baa = $(_0x29ea65(0x1f0))[_0x29ea65(0x20f)](), _0x127009 = $(_0x29ea65(0x205))['val'](), _0x3ff534 = new Set(_0x479683), _0x524736 = _0x479683['filter']((_0x4dac68, _0x66e957) => _0x479683[_0x29ea65(0x1dc)](_0x4dac68) !== _0x66e957); if (_0x524736['length'] > 0x0) { const _0x27d858 = _0x29ea65(0x1f5) + Array[_0x29ea65(0x201)](new Set(_0x524736))['join'](',\x20') + _0x29ea65(0x1d0); confirm(_0x27d858) && (_0x479683 = Array[_0x29ea65(0x201)](_0x3ff534), $(_0x29ea65(0x1e7))[_0x29ea65(0x20f)](_0x479683[_0x29ea65(0x1ce)]('\x0a'))); } _0x150fdd = _0x313878[_0x29ea65(0x208)](_0x3fa73a => { const _0x2c9826 = _0x29ea65, _0x4f7b7b = _0x479683['includes'](_0x3fa73a['ID'] && _0x3fa73a['ID'][_0x2c9826(0x1fc)]()[_0x2c9826(0x1f3)]()), _0x2e874a = _0x33879e[_0x2c9826(0x1f7)] ? _0x33879e[_0x2c9826(0x1df)](_0x3fa73a[_0x2c9826(0x1e4)]) : !![], _0x43191e = _0x1a3baa ? _0x3fa73a[_0x2c9826(0x20b)] === _0x1a3baa : !![], _0x5e1dc8 = _0x127009 ? _0x3fa73a[_0x2c9826(0x1c9)] === _0x127009 : !![]; return _0x4f7b7b && _0x2e874a && _0x43191e && _0x5e1dc8; }); const _0x353541 = $(_0x29ea65(0x1cb)); _0x353541['empty'](); const _0x5db20a = new Set(); let _0xc4ad14 = 0x0; _0x150fdd[_0x29ea65(0x1f7)] === 0x0 ? (_0x353541[_0x29ea65(0x1f1)](_0x29ea65(0x1d5)), $(_0x29ea65(0x20d))[_0x29ea65(0x1ef)](), $('#resultCount')['text'](_0x29ea65(0x20c))) : (_0x150fdd[_0x29ea65(0x1ff)](_0x223c79 => { const _0x3acbba = _0x29ea65; !_0x5db20a[_0x3acbba(0x1d1)](_0x223c79['ID']) ? (_0x5db20a[_0x3acbba(0x207)](_0x223c79['ID']), _0x353541[_0x3acbba(0x1f1)](_0x3acbba(0x1d4) + _0x223c79['ID'] + '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>' + _0x223c79['FNAME'] + _0x3acbba(0x1ea) + _0x223c79[_0x3acbba(0x1de)] + _0x3acbba(0x1ea) + _0x223c79[_0x3acbba(0x1ca)] + _0x3acbba(0x1ea) + _0x223c79[_0x3acbba(0x211)] + _0x3acbba(0x1ea) + _0x223c79['CenterEnglishName'] + '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>' + _0x223c79[_0x3acbba(0x20b)] + _0x3acbba(0x1ea) + _0x223c79['StatusName'] + _0x3acbba(0x200))) : _0xc4ad14++; }), _0xc4ad14 > 0x0 && alert(_0x29ea65(0x1fd) + _0xc4ad14 + '\x20صف\x20مكرر\x20ولم\x20يتم\x20عرضه.'), $(_0x29ea65(0x1f9))['text'](_0x29ea65(0x1fd) + _0x5db20a[_0x29ea65(0x1d6)] + _0x29ea65(0x213) + _0x479683['length'] + '\x20ID.'), $('#downloadResults')[_0x29ea65(0x1ee)]()); }), $(_0x4d8552(0x20d))['on'](_0x4d8552(0x204), function () { const _0x3bfc3a = _0x4d8552, _0xb6016b = XLSX[_0x3bfc3a(0x203)][_0x3bfc3a(0x1d8)](_0x150fdd), _0xf0cc0e = XLSX['utils'][_0x3bfc3a(0x1f6)](); XLSX[_0x3bfc3a(0x203)]['book_append_sheet'](_0xf0cc0e, _0xb6016b, 'نتائج\x20البحث'), XLSX[_0x3bfc3a(0x212)](_0xf0cc0e, 'نتائج_البحث.xlsx'); }); })); function _0x2290(_0x5bf5e8, _0x48b7b5) { const _0x727a39 = _0x727a(); return _0x2290 = function (_0x2290d8, _0x53f68b) { _0x2290d8 = _0x2290d8 - 0x1c9; let _0x22bca4 = _0x727a39[_0x2290d8]; return _0x22bca4; }, _0x2290(_0x5bf5e8, _0x48b7b5); } function _0x727a() { const _0x29d74b = ['StatusName', 'TNAME', '#result-body', '<option\x20value=\x22\x22>اختر</option>', '1962878yoVFJV', 'join', 'onload', '.\x20هل\x20تريد\x20حذف\x20التكرارات؟', 'has', '8111376KEdRXb', 'read', '\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>', '<tr><td\x20colspan=\x228\x22>لا\x20توجد\x20نتائج.</td></tr>', 'size', '16uWVXRR', 'json_to_sheet', 'target', '83724puIvvb', 'array', 'indexOf', 'map', 'SNAME', 'includes', '884cmSQWF', 'ready', '1464492lahZYt', '1840678icygLk', 'CenterEnglishName', 'sheet_to_json', '130LapFLr', '#idInput', '4376cMNsRs', 'split', '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td>', '#loadData', '1kteZXR', '737913FtiqNL', 'show', 'hide', '#categorySelect', 'append', '</option>', 'trim', '.selectpicker', 'تم\x20العثور\x20على\x20تكرارات\x20في\x20الـ\x20IDs:\x20', 'book_new', 'length', 'selectpicker', '#resultCount', '15wqCzYV', '<option\x20value=\x22', 'toString', 'تم\x20العثور\x20على\x20', '1395aPqlVx', 'forEach', '</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</tr>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20', 'from', 'SheetNames', 'utils', 'click', '#statusSelect', 'result', 'add', 'filter', 'readAsArrayBuffer', 'files', 'CategoryEnglishName', 'لم\x20يتم\x20العثور\x20على\x20نتائج.', '#downloadResults', 'Sheets', 'val', '#centerSelect', 'LNAME', 'writeFile', '\x20من\x20']; _0x727a = function () { return _0x29d74b; }; return _0x727a(); }
+  </script>
+</body>
+
+</html>
