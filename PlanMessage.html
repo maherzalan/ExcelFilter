@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Parcel Distribution Plan</title>
+
+    <!-- Add Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-pzjw8f+ua7Kw1TIq0yGyB5tH07QovwU5auNz2gjpcoRg9w6N5dGrctYhg4P76myN" crossorigin="anonymous">
+    <!-- Add CSS for Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Add html2canvas Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #columnsForm {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        /* Optional: Customizing select box */
+        .select2-container {
+            width: 100% !important;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .btn-primary {
+            background-color: #a74628;
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        #output {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .highlight {
+            color: rgb(200, 38, 19);
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        select,
+        input[type="file"] {
+            max-width: 100%;
+        }
+
+        /* Style for the table rows */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        /* Style for odd and even rows */
+        tr.odd {
+            background-color: #c9c5c5;
+            /* Light grey for odd rows */
+        }
+
+        tr.even {
+            background-color: #ffffff;
+            /* White for even rows */
+        }
+
+        /* Optional: Hover effect for rows */
+        tr:hover {
+            background-color: #f1f1f1;
+            /* Change background color when hovering over a row */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Food Parcel Distribution Plan</h1>
+
+        <!-- File Upload -->
+        <div class="form-group">
+            <label for="file">Upload Excel File</label>
+            <input type="file" id="file" class="form-control-file">
+        </div>
+
+        <!-- Select Columns to Display -->
+        <h3>Select Columns to Display</h3>
+        <div id="columnsForm" class="form-group">
+            <label for="columnsSelect">Select columns:</label>
+            <select id="columnsSelect" class="form-control" multiple size="10">
+                <option value="showCenterName" selected>Center Name</option>
+                <option value="showCenterNameAR" selected>Center Name AR</option>
+                <option value="showCenterAddress" selected>Center Address</option>
+                <option value="showParcelType" selected>Parcel Type</option>
+                <option value="showEligibleInternal">Eligible Internal</option>
+                <option value="showEligibleExternal">Eligible External</option>
+                <option value="showTotalEligible" selected>Total Eligible</option>
+                <option value="showCriterion" selected>Criterion</option>
+                <option value="showQuantitySent" selected>Quantity Sent</option>
+                <option value="showSymbol">Symbol</option>
+            </select>
+        </div>
+
+        <!-- Select display format -->
+        <h3>Select Display Type</h3>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id="Table" type="radio" name="displayType" value="table">
+            <label class="form-check-label" for="Table">Table</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id="Text" type="radio" name="displayType" value="text">
+            <label class="form-check-label" for="Text">Text</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id="Both" type="radio" name="displayType" value="both" checked>
+            <label class="form-check-label" for="Both">Both</label>
+        </div>
+
+
+        <br><br>
+
+        <!-- Download and Generate Email Buttons -->
+
+        <button id="generateEmail" class="btn btn-primary">Generate Plan Email</button>
+        <button id="changeMessage" class="btn btn-primary">Generate Print Email</button>
+        <button id="copyMessage" class="btn btn-primary">Copy Message</button>
+        <button id="generateImage" class="btn btn-primary">Convert to Image</button>
+        <button id="downloadExcel" class="btn btn-primary">Download Excel File</button>
+
+
+        <!-- Output Section -->
+        <div id="output" contenteditable="true"></div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Initialize the total variables
+        let totalEligible = 0;
+        let totalQuantitySent = 0;
+        // Function to format numbers with commas as thousand separators
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Function to generate email text from Excel file
+        $(document).ready(function () {
+            // Initialize Select2 for the columns select
+            $('#columnsSelect').select2({
+                placeholder: 'Search for columns...',
+                allowClear: true
+            });
+            let totalEligible = 0;
+            let totalQuantitySent = 0;
+            $('#generateEmail').click(function () {
+                const file = document.getElementById('file').files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+
+                    // Get selected columns
+                    const selectedColumns = $('#columnsSelect').val();
+
+                    // Get display type (table, text, or both)
+                    const displayType = $('input[name="displayType"]:checked').val();
+
+
+
+                    let output = `<h3>Subject: Food Parcel Distribution Plan - Summary</h3>`;
+                    // Preparing email text
+                    output = ` 
+                        <h3 style="direction: ltr;">Subject: Food Coupon Distribution Plan for Beneficiaries</h3>
+                        <p style="direction: ltr;"><b>To:</b> JOUDA, Wajdi <W.JOUDA@UNRWA.ORG>; AL-OBWAINI, Maysa <M.Obwaini@UNRWA.ORG>; EL-QATRAWI, Riyad <R.QATRAWI@UNRWA.ORG></p>
+                        <p style="direction: ltr;"><b>CC:</b> NAJJAR, Fathi <F.NAJJAR@UNRWA.ORG>; ABU-SWIERH, A/Aziz <A.AbuSWIERH@UNRWA.ORG>; EL-SARRAJ, Iyad <I.ElSarraj@UNRWA.ORG>; BALATA, Nisreen <N.BALATA@UNRWA.ORG>; NASSER, Khaled (G/ARSSO) <Kh.NASSER@UNRWA.ORG>; ABU-MARAHIL, Maher <M.AbuMarahil@UNRWA.ORG></p>
+                    `;
+                    output += `<p>Dear Colleagues,</p>`;
+
+                    // First loop to calculate totals
+                    json.forEach(row => {
+                        // Ensure Total Eligible is a valid number
+                        let totalEligibleValue = parseFloat(row["Total Eligible"]);
+                        if (!isNaN(totalEligibleValue)) {
+                            totalEligible += totalEligibleValue;
+                        }
+
+                        // Ensure Quantity Sent is a valid number
+                        let quantitySentValue = parseFloat(row["Quantity Sent"]);
+                        if (!isNaN(quantitySentValue)) {
+                            totalQuantitySent += quantitySentValue;
+                        }
+                    });
+
+
+                    if (displayType === 'text' || displayType === 'both') {
+                        // إعادة تعيين الإجماليات قبل البدء
+                        totalEligible = 0;
+                        totalQuantitySent = 0;
+
+                        output += `<p>We would like to inform you that the food parcel distribution plan for the following shelters has been finalized. Please find the details of the planned distribution below:</p>`;
+                        output += `<h3>Shelters and Distribution Details:</h3>`;
+
+                        // Build the text output dynamically
+                        json.forEach(row => {
+                            if (row["Quantity Sent"] && row["Total Eligible"] && row["Center Name"]) {
+                                let rowOutput = `<h4>`;
+
+                                // Conditionally add the columns based on selection
+                                if (selectedColumns.includes("showCenterName")) rowOutput += `${row["Center Name"]}`;
+                                if (selectedColumns.includes("showCenterNameAR")) rowOutput += ` | <span style="direction: rtl;">${row["Center Name AR"]}</span>`;
+                                if (selectedColumns.includes("showCenterAddress")) rowOutput += ` | <span style="direction: rtl;">${row["Center Address"]}</span>`;
+
+                                rowOutput += `</h4>`;
+
+                                rowOutput += `<ul>`;
+                                if (selectedColumns.includes("showParcelType")) rowOutput += `<li>Parcel Type: <b>${row["Parcel Type"]}</b></li>`;
+                                if (selectedColumns.includes("showEligibleInternal")) rowOutput += `<li>Eligible Internal: <b>${row["Eligible Internal"]}</b></li>`;
+                                if (selectedColumns.includes("showEligibleExternal")) rowOutput += `<li>Eligible External: <b>${row["Eligible External"]}</b></li>`;
+                                if (selectedColumns.includes("showCriterion")) rowOutput += `<li>Criterias: <b>${row["Criterion"]}</b></li>`;
+
+                                // Add Total Eligible if selected
+                                if (selectedColumns.includes("showTotalEligible")) {
+                                    let totalEligibleValue = parseFloat(row["Total Eligible"]);
+                                    if (!isNaN(totalEligibleValue)) {
+                                        totalEligible += totalEligibleValue; // جمع الإجماليات
+                                        rowOutput += `<li>Total Eligible: <b>${formatNumber(totalEligibleValue)}</b></li>`;
+                                    }
+                                }
+
+                                // Add Quantity Sent if selected
+                                if (selectedColumns.includes("showQuantitySent")) {
+                                    let quantitySentValue = parseFloat(row["Quantity Sent"]);
+                                    if (!isNaN(quantitySentValue)) {
+                                        totalQuantitySent += quantitySentValue; // جمع الكميات المرسلة
+                                        rowOutput += `<li>Quantity Sent: <b>${formatNumber(quantitySentValue)}</b></li>`;
+                                    }
+                                }
+
+                                if (selectedColumns.includes("showSymbol")) rowOutput += `<li>Symbol: <b>${row["Symbol"]}</b></li>`;
+
+                                rowOutput += `</ul>`;
+                                rowOutput += `<hr>`;
+                                output += rowOutput;
+                            }
+                        });
+
+                        // Display the totals for eligible and quantity sent
+                        output += `<h3>Total Eligible: ${formatNumber(totalEligible)}</h3>`;
+                        output += `<h3>Total Quantity Sent: ${formatNumber(totalQuantitySent)}</h3>`;
+
+                        if (displayType === 'both') {
+                            output += `<hr/>`;
+                        }
+                    }
+
+
+                    // Create table if selected
+                    if (displayType === 'table' || displayType === 'both') {
+                        let tableOutput = "<table> <caption><b>Food Parcel Distribution Plan - Summary</b><br></caption>";
+                        tableOutput += "<thead><tr>";
+
+                        // Add headers
+                        if (selectedColumns.includes("showCenterName")) tableOutput += "<th>Center Name</th>";
+                        if (selectedColumns.includes("showCenterNameAR")) tableOutput += "<th>Center Name AR</th>";
+                        if (selectedColumns.includes("showCenterAddress")) tableOutput += "<th>Center Address</th>";
+                        if (selectedColumns.includes("showParcelType")) tableOutput += "<th>Parcel Type</th>";
+                        if (selectedColumns.includes("showCriterion")) tableOutput += "<th>Criterion</th>";
+                        if (selectedColumns.includes("showTotalEligible")) tableOutput += "<th>Total Eligible</th>";
+                        if (selectedColumns.includes("showQuantitySent")) tableOutput += "<th>Quantity Sent</th>";
+
+                        tableOutput += "</tr></thead><tbody>";
+
+                        // إعادة تعيين الإجماليات قبل الحساب
+                        totalEligible = 0;
+                        totalQuantitySent = 0;
+
+                        // Loop through data
+                        json.forEach((row, index) => {
+                            // Check for valid data rows
+                            if (!row["Center Name"] || !row["Total Eligible"] || !row["Quantity Sent"]) return; // Skip rows with missing data
+
+                            // Add row
+                            let rowClass = index % 2 === 0 ? 'even' : 'odd'; // Add row styling
+                            tableOutput += `<tr class="${rowClass}">`;
+
+                            if (selectedColumns.includes("showCenterName")) tableOutput += `<td>${row["Center Name"]}</td>`;
+                            if (selectedColumns.includes("showCenterNameAR")) tableOutput += `<td>${row["Center Name AR"]}</td>`;
+                            if (selectedColumns.includes("showCenterAddress")) tableOutput += `<td>${row["Center Address"]}</td>`;
+                            if (selectedColumns.includes("showParcelType")) tableOutput += `<td>${row["Parcel Type"]}</td>`;
+                            if (selectedColumns.includes("showCriterion")) tableOutput += `<td>${row["Criterion"]}</td>`;
+
+                            // Add Total Eligible
+                            if (selectedColumns.includes("showTotalEligible")) {
+                                let totalEligibleValue = parseFloat(row["Total Eligible"]);
+                                if (!isNaN(totalEligibleValue)) {
+                                    totalEligible += totalEligibleValue; // Sum up total eligible
+                                    tableOutput += `<td>${formatNumber(totalEligibleValue)}</td>`;
+                                } else {
+                                    tableOutput += `<td>0</td>`;
+                                }
+                            }
+
+                            // Add Quantity Sent
+                            if (selectedColumns.includes("showQuantitySent")) {
+                                let quantitySentValue = parseFloat(row["Quantity Sent"]);
+                                if (!isNaN(quantitySentValue)) {
+                                    totalQuantitySent += quantitySentValue; // Sum up total quantity sent
+                                    tableOutput += `<td>${formatNumber(quantitySentValue)}</td>`;
+                                } else {
+                                    tableOutput += `<td>0</td>`;
+                                }
+                            }
+
+                            tableOutput += "</tr>";
+                        });
+
+                        // Add totals row
+                        tableOutput += `<tr><td colspan="${selectedColumns.length - 1}" style="text-align:right; font-weight: bold;">Total Eligible</td><td>${formatNumber(totalEligible)}</td></tr>`;
+                        tableOutput += `<tr><td colspan="${selectedColumns.length - 1}" style="text-align:right; font-weight: bold;">Total Quantity Sent</td><td>${formatNumber(totalQuantitySent)}</td></tr>`;
+                        tableOutput += "</tbody></table>";
+
+                        output += tableOutput;
+                    }
+
+
+                    output += `
+                       <p style="direction: ltr;"><b>Notes:</b></p>
+                        <ul style="direction: ltr; list-style-type: disc;">
+                            <li style="direction: ltr;">The difference between the eligible and sent quantities is due to factors such as incomplete distribution, changes in the number of eligible recipients, logistical challenges, and unforeseen circumstances</li>
+                            <li style="direction: ltr;">Coupons will only be printed once the quantities have been received at the designated warehouses for these centers.</li>
+                            </ul>
+                            
+                        </ul>`;
+
+                    output += `<p>Best regards,</p>`;
+                    $('#output').html(output);
+                };
+                reader.readAsArrayBuffer(file);
+            });
+            $('#changeMessage').click(function () {
+                const file = document.getElementById('file').files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+
+                    // Get selected columns
+                    const selectedColumns = $('#columnsSelect').val();
+
+                    // Get display type (table, text, or both)
+                    const displayType = $('input[name="displayType"]:checked').val();
+
+                    let totalEligible = 0;
+                    let totalQuantitySent = 0;
+
+                    let output = `<h3>Subject: Food Parcel Printing Results for Shelters</h3>`;  // تعديل العنوان
+                    output += `
+            <p style="direction: ltr;"><b>To:</b> JOUDA, Wajdi <W.JOUDA@UNRWA.ORG>; AL-OBWAINI, Maysa <M.Obwaini@UNRWA.ORG>; EL-QATRAWI, Riyad <R.QATRAWI@UNRWA.ORG></p>
+            <p style="direction: ltr;"><b>CC:</b> NAJJAR, Fathi <F.NAJJAR@UNRWA.ORG>; ABU-SWIERH, A/Aziz <A.AbuSWIERH@UNRWA.ORG>; EL-SARRAJ, Iyad <I.ElSarraj@UNRWA.ORG>; BALATA, Nisreen <N.BALATA@UNRWA.ORG>; NASSER, Khaled (G/ARSSO) <Kh.NASSER@UNRWA.ORG>; ABU-MARAHIL, Maher <M.AbuMarahil@UNRWA.ORG></p>
+        `;
+                    output += `<p>Dear Colleagues,</p>`;
+
+                    // Loop through data to calculate totals and prepare the message
+                    json.forEach(row => {
+                        let totalEligibleValue = parseFloat(row["Total Eligible"]);
+                        if (!isNaN(totalEligibleValue)) {
+                            totalEligible += totalEligibleValue;
+                        }
+
+                        let quantitySentValue = parseFloat(row["Quantity Sent"]);
+                        if (!isNaN(quantitySentValue)) {
+                            totalQuantitySent += quantitySentValue;
+                        }
+                    });
+
+                    if (displayType === 'text' || displayType === 'both') {
+                        // إعادة تعيين الإجماليات قبل البدء
+                        totalEligible = 0;
+                        totalQuantitySent = 0;
+                        output += `<p>We would like to inform you that the food parcel printing results for the following shelters have been finalized. Please find the details of the planned distribution below:</p>`;
+                        output += `<h3>Shelters and Printing Results:</h3>`;
+
+                        // Build the text output dynamically
+                        json.forEach(row => {
+                            if (row["Quantity Sent"] && row["Total Eligible"] && row["Center Name"]) {
+                                let rowOutput = `<h4>`;
+
+                                // Conditionally add the columns based on selection
+                                if (selectedColumns.includes("showCenterName")) rowOutput += `${row["Center Name"]}`;
+                                if (selectedColumns.includes("showCenterNameAR")) rowOutput += ` | <span style="direction: rtl;">${row["Center Name AR"]}</span>`;
+                                if (selectedColumns.includes("showCenterAddress")) rowOutput += ` | <span style="direction: rtl;">${row["Center Address"]}</span>`;
+
+                                rowOutput += `</h4>`;
+
+                                rowOutput += `<ul>`;
+                                if (selectedColumns.includes("showParcelType")) rowOutput += `<li>Parcel Type: <b>${row["Parcel Type"]}</b></li>`;
+                                if (selectedColumns.includes("showEligibleInternal")) rowOutput += `<li>Eligible Internal: <b>${row["Eligible Internal"]}</b></li>`;
+                                if (selectedColumns.includes("showEligibleExternal")) rowOutput += `<li>Eligible External: <b>${row["Eligible External"]}</b></li>`;
+                                if (selectedColumns.includes("showCriterion")) rowOutput += `<li>Criterias: <b>${row["Criterion"]}</b></li>`;
+
+                                // Add Total Eligible if selected
+                                if (selectedColumns.includes("showTotalEligible")) {
+                                    let totalEligibleValue = parseFloat(row["Total Eligible"]);
+                                    if (!isNaN(totalEligibleValue)) {
+                                        totalEligible += totalEligibleValue; // جمع الإجماليات
+                                        rowOutput += `<li>Total Eligible: <b>${formatNumber(totalEligibleValue)}</b></li>`;
+                                    }
+                                }
+
+                                // Add Quantity Sent if selected
+                                if (selectedColumns.includes("showQuantitySent")) {
+                                    let quantitySentValue = parseFloat(row["Quantity Sent"]);
+                                    if (!isNaN(quantitySentValue)) {
+                                        totalQuantitySent += quantitySentValue; // جمع الكميات المرسلة
+                                        rowOutput += `<li>Quantity Sent: <b>${formatNumber(quantitySentValue)}</b></li>`;
+                                    }
+                                }
+
+                                if (selectedColumns.includes("showSymbol")) rowOutput += `<li>Symbol: <b>${row["Symbol"]}</b></li>`;
+
+                                rowOutput += `</ul>`;
+                                rowOutput += `<hr>`;
+                                output += rowOutput;
+                            }
+                        });
+
+                        // Display the totals for eligible and quantity sent
+                        output += `<h3>Total Eligible: ${formatNumber(totalEligible)}</h3>`;
+                        output += `<h3>Total Quantity Sent: ${formatNumber(totalQuantitySent)}</h3>`;
+
+                        if (displayType === 'both') {
+                            output += `<hr/>`;
+                        }
+                    }
+
+                    if (displayType === 'table' || displayType === 'both') {
+                        let tableOutput = "<table> <caption><b>Food Parcel Printing Results for Shelters - Summary</b><br></caption>";  // تعديل العنوان
+                        tableOutput += "<thead><tr>";
+
+                        // Add headers
+                        if (selectedColumns.includes("showCenterName")) tableOutput += "<th>Center Name</th>";
+                        if (selectedColumns.includes("showCenterNameAR")) tableOutput += "<th>Center Name AR</th>";
+                        if (selectedColumns.includes("showCenterAddress")) tableOutput += "<th>Center Address</th>";
+                        if (selectedColumns.includes("showParcelType")) tableOutput += "<th>Parcel Type</th>";
+                        if (selectedColumns.includes("showCriterion")) tableOutput += "<th>Criterion</th>";
+                        if (selectedColumns.includes("showTotalEligible")) tableOutput += "<th>Total Eligible</th>";
+                        if (selectedColumns.includes("showQuantitySent")) tableOutput += "<th>Quantity Sent</th>";
+
+                        tableOutput += "</tr></thead><tbody>";
+
+                        totalEligible = 0;
+                        totalQuantitySent = 0;
+
+                        json.forEach((row, index) => {
+                            if (!row["Center Name"] || !row["Total Eligible"] || !row["Quantity Sent"]) return;
+
+                            let rowClass = index % 2 === 0 ? 'even' : 'odd';
+                            tableOutput += `<tr class="${rowClass}">`;
+
+                            if (selectedColumns.includes("showCenterName")) tableOutput += `<td>${row["Center Name"]}</td>`;
+                            if (selectedColumns.includes("showCenterNameAR")) tableOutput += `<td>${row["Center Name AR"]}</td>`;
+                            if (selectedColumns.includes("showCenterAddress")) tableOutput += `<td>${row["Center Address"]}</td>`;
+                            if (selectedColumns.includes("showParcelType")) tableOutput += `<td>${row["Parcel Type"]}</td>`;
+                            if (selectedColumns.includes("showCriterion")) tableOutput += `<td>${row["Criterion"]}</td>`;
+
+                            if (selectedColumns.includes("showTotalEligible")) {
+                                let totalEligibleValue = parseFloat(row["Total Eligible"]);
+                                if (!isNaN(totalEligibleValue)) {
+                                    totalEligible += totalEligibleValue;
+                                    tableOutput += `<td>${formatNumber(totalEligibleValue)}</td>`;
+                                } else {
+                                    tableOutput += `<td>0</td>`;
+                                }
+                            }
+
+                            if (selectedColumns.includes("showQuantitySent")) {
+                                let quantitySentValue = parseFloat(row["Quantity Sent"]);
+                                if (!isNaN(quantitySentValue)) {
+                                    totalQuantitySent += quantitySentValue;
+                                    tableOutput += `<td>${formatNumber(quantitySentValue)}</td>`;
+                                } else {
+                                    tableOutput += `<td>0</td>`;
+                                }
+                            }
+
+                            tableOutput += "</tr>";
+                        });
+
+                        tableOutput += `<tr><td colspan="${selectedColumns.length - 1}" style="text-align:right; font-weight: bold;">Total Eligible</td><td>${formatNumber(totalEligible)}</td></tr>`;
+                        tableOutput += `<tr><td colspan="${selectedColumns.length - 1}" style="text-align:right; font-weight: bold;">Total Quantity Sent</td><td>${formatNumber(totalQuantitySent)}</td></tr>`;
+
+                        tableOutput += "</tbody></table>";
+                        output += tableOutput;
+                    }
+                    output += `
+                       <p style="direction: ltr;"><b>Notes:</b></p>
+                        <ul style="direction: ltr; list-style-type: disc;">
+                            <li style="direction: ltr;">An attachment is included containing the list of eligible families.</li>                          
+                            <li style="direction: ltr;">The focal point is kindly requested to coordinate with PLD stores' representatives for the delivery of the parcels mentioned above.</li>
+                            <li style="direction: ltr;">Your quick feedback (by forwarding to our colleague <b>Nisreen</b> for coordination) regarding the delivery status per case in the same file and replying to this email with the updates will be appreciated.</li>
+                        </ul>`;
+                    output += `<p>We hope this information is helpful. If you have any questions or need further details, please feel free to contact us.</p>`;
+                    output += `<p>Best regards,</p>`;
+                    $('#output').html(output);
+                };
+
+                reader.readAsArrayBuffer(file);
+            });
+
+
+
+
+            // Function to download the content as Excel file
+            $('#downloadExcel').click(function () {
+                const file = document.getElementById('file').files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+
+                    // الحصول على الورقة الأولى فقط
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+
+                    // إنشاء كتاب جديد مع الورقة الأولى فقط
+                    const newWorkbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(newWorkbook, worksheet, firstSheetName);
+
+                    // تحويل الكتاب إلى تنسيق Excel (xlsx)
+                    const wbout = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'binary' });
+
+                    // إنشاء Blob من بيانات Excel
+                    const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+
+                    // تنزيل ملف Excel
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "Food_Parcels_Distribution_Plan_First_Sheet.xlsx"; // تحميل الورقة الأولى فقط
+                    link.click();
+                };
+
+                reader.readAsArrayBuffer(file);
+            });
+
+            // Convert string to array buffer
+            function s2ab(s) {
+                const buf = new ArrayBuffer(s.length);
+                const view = new Uint8Array(buf);
+                for (let i = 0; i < s.length; i++) {
+                    view[i] = s.charCodeAt(i) & 0xFF;
+                }
+                return buf;
+            }
+        });
+
+        $('#generateImage').click(function () {
+            const tableElement = $('#output table');  // Get the output div
+            html2canvas(tableElement, {
+                onrendered: function (canvas) {
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgTag = `<img src="${imgData}" />`;
+                    $('#output table').html(imgTag);  // Show the image inside the output div
+                }
+            });
+        });
+
+
+
+
+    </script>
+</body>
+
+</html>
